@@ -1,23 +1,5 @@
 use crate::*;
 
-/// Panic handler in test mode.
-#[cfg(test)]
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
-  test_main();
-  loop {}
-}
-
-#[cfg(test)]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-  serial_println!("[failed]\n");
-  serial_println!("Error: {}\n", info);
-
-  qemu::exit(qemu::ExitCode::Failed);
-  loop {}
-}
-
 pub trait Testable {
   fn run(&self) -> ();
 }
@@ -31,6 +13,21 @@ where
     self();
     serial_println!("[ok]");
   }
+}
+
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+  serial_println!("[failed]\n");
+  serial_println!("Error: {}\n", info);
+
+  qemu::exit(qemu::ExitCode::Failed);
+  loop {}
+}
+
+pub fn main() -> ! {
+  test_main();
+  loop {}
 }
 
 pub fn runner(tests: &[&dyn Testable]) {

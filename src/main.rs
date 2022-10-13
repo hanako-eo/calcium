@@ -1,9 +1,11 @@
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
+#![feature(abi_x86_interrupt)]
 #![test_runner(crate::test::runner)]
 #![reexport_test_harness_main = "test_main"]
 
+mod interrupts;
 mod memory;
 #[cfg(test)]
 mod qemu;
@@ -14,6 +16,18 @@ mod vga;
 
 use core::panic::PanicInfo;
 
+fn init() {
+  interrupts::init_idt();
+}
+
+fn main() -> ! {
+  println!("Hello World!");
+
+  x86_64::instructions::interrupts::int3();
+
+  loop {}
+}
+
 /// This function is called on panic.
 #[cfg(not(test))]
 #[panic_handler]
@@ -23,10 +37,11 @@ fn panic(info: &PanicInfo) -> ! {
   loop {}
 }
 
-#[cfg(not(test))]
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-  println!("Hello World!");
-
-  loop {}
+  init();
+  #[cfg(not(test))]
+  main();
+  #[cfg(test)]
+  test::main();
 }
