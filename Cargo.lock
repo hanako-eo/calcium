@@ -31,11 +31,18 @@ name = "calcium"
 version = "0.1.0"
 dependencies = [
  "bootloader",
+ "cc",
  "lazy_static",
  "spin 0.9.4",
  "uart_16550",
  "x86_64",
 ]
+
+[[package]]
+name = "cc"
+version = "1.0.73"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2fff2a6927b3bb87f9595d67196a70493f627687a71d87a0d692242c33f58c11"
 
 [[package]]
 name = "lazy_static"

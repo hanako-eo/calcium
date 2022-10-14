@@ -12,6 +12,9 @@ lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 uart_16550 = "0.2.18"
 x86_64 = "0.14.2"
 
+[build-dependencies]
+cc = "1.0.73"
+
 [package.metadata.bootimage]
 test-args = [
     "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", 
