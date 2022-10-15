@@ -48,7 +48,7 @@ expr:
   expr POWER expr { $$ = pow($1, $3); } |
   expr MULT expr { $$ = $1 * $3; } |
   expr DIV expr { $$ = $1 / $3; } |
-  LEFT_P expr RIGHT_P { $$ = $2; } |
+  LEFT_P expr RIGHT_P { $$ = $2; };
 %%
 
 void execute_line(const char* line) {

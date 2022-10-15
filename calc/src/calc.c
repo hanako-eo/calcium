@@ -1,3 +1,8 @@
-int square(int value) {
-  return value * value;
+#include <stdio.h>
+// #include "lexer.c"
+#include "grammar.h"
+
+int main(void) {
+  execute_line("4 + 4");
+  printf("Hello");
 }
