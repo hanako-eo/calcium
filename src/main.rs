@@ -5,6 +5,7 @@
 #![test_runner(crate::test::runner)]
 #![reexport_test_harness_main = "test_main"]
 
+mod gdt;
 mod interrupts;
 mod memory;
 #[cfg(test)]
@@ -17,13 +18,12 @@ mod vga;
 use core::panic::PanicInfo;
 
 fn init() {
+  gdt::init();
   interrupts::init_idt();
 }
 
 fn main() -> ! {
   println!("Hello World!");
-
-  x86_64::instructions::interrupts::int3();
 
   loop {}
 }
