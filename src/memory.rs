@@ -1,6 +1,10 @@
 pub struct Volatile<T>(T);
 
 impl<T> Volatile<T> {
+  pub fn new(value: T) -> Self {
+    Self(value)
+  }
+
   pub fn read(&self) -> T {
     unsafe { core::ptr::read_volatile(&self.0) }
   }

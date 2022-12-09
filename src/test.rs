@@ -15,21 +15,6 @@ where
   }
 }
 
-#[cfg(test)]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-  serial_println!("[failed]\n");
-  serial_println!("Error: {}\n", info);
-
-  qemu::exit(qemu::ExitCode::Failed);
-  loop {}
-}
-
-pub fn main() -> ! {
-  test_main();
-  loop {}
-}
-
 pub fn runner(tests: &[&dyn Testable]) {
   serial_println!("Running {} tests", tests.len());
   for test in tests {
