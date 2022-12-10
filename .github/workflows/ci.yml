@@ -4,17 +4,15 @@ on:
   push:
   pull_request:
 
+env:
+  IMAGE_NAME: docker-image
+
 jobs:
   qemu:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - 
-        name: Set up Rust
-        uses: icepuma/rust-action@master
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - 
-        name: Run tests
-        run: cargo test
+      - name: Build docker images
+        run: docker build -t $IMAGE_NAME --file=./Dockerfile .
+      - name: Run tests
+        run: docker run -i $IMAGE_NAME cargo test
