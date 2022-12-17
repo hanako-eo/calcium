@@ -10,7 +10,7 @@ fn panic(_info: &PanicInfo) -> ! {
 
   qemu::exit(qemu::ExitCode::Success);
 
-  loop {}
+  calcium::hlt_loop()
 }
 
 #[no_mangle]
@@ -20,7 +20,7 @@ pub extern "C" fn _start() -> ! {
 
   qemu::exit(qemu::ExitCode::Failed);
 
-  loop {}
+  calcium::hlt_loop()
 }
 
 fn should_fail() {

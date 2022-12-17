@@ -19,6 +19,7 @@ fn init() {
   unsafe {
     interrupts::PICS.lock().initialize();
   };
+  x86_64::instructions::interrupts::enable();
 }
 
 fn main() {
@@ -30,7 +31,7 @@ fn main() {
 fn panic(info: &PanicInfo) -> ! {
   println!("{}", info);
 
-  loop {}
+  calcium::hlt_loop()
 }
 
 #[no_mangle]
@@ -44,5 +45,5 @@ pub extern "C" fn _start() -> ! {
     test_main();
   }
 
-  loop {}
+  calcium::hlt_loop()
 }
