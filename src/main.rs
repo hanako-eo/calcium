@@ -1,30 +1,12 @@
 #![no_std]
 #![no_main]
-#![feature(custom_test_frameworks)]
-#![feature(abi_x86_interrupt)]
-#![test_runner(calcium::test::runner)]
 #![reexport_test_harness_main = "test_main"]
+#![feature(custom_test_frameworks)]
+#![test_runner(calcium::test::runner)]
 
-mod gdt;
-mod interrupts;
-mod memory;
-mod serial;
-mod vga;
-
+use bootloader::{entry_point, BootInfo};
+use calcium::println;
 use core::panic::PanicInfo;
-
-fn init() {
-  gdt::init();
-  interrupts::init_idt();
-  unsafe {
-    interrupts::PICS.lock().initialize();
-  };
-  x86_64::instructions::interrupts::enable();
-}
-
-fn main() {
-  println!("Hello World!");
-}
 
 /// This function is called on panic.
 #[panic_handler]
@@ -34,16 +16,14 @@ fn panic(info: &PanicInfo) -> ! {
   calcium::hlt_loop()
 }
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
-  init();
+entry_point!(kernel_main);
 
-  if cfg!(not(test)) {
-    main();
-  } else {
-    #[cfg(test)]
-    test_main();
-  }
+fn kernel_main(_bootinfo: &'static BootInfo) -> ! {
+  calcium::init();
+  println!("Hello World!");
+
+  #[cfg(test)]
+  test_main();
 
   calcium::hlt_loop()
 }
